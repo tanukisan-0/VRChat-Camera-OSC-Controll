@@ -1,0 +1,411 @@
+﻿<Window x:Class="WpfApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:wc="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="VRChat Camera OSC Control"
+        Width="1200" Height="600"
+        WindowStyle="None"
+        ResizeMode="CanResizeWithGrip" MinWidth="400" MinHeight="550"
+        Icon="/Resourse/ICON.ico">
+
+    <!-- WindowChrome 設定 -->
+    <WindowChrome.WindowChrome>
+        <wc:WindowChrome
+            CaptionHeight="5"
+            ResizeBorderThickness="5"
+            GlassFrameThickness="5"
+            UseAeroCaptionButtons="False"/>
+    </WindowChrome.WindowChrome>
+
+    <Window.Resources>
+        <!-- タイトルバー用ボタンスタイル -->
+        <Style x:Key="TitleBarButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Width" Value="45"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0,0,0,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="0">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="LightGray"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="DarkGray"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Window.Background>
+        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
+    </Window.Background>
+
+    <DockPanel>
+        <!-- カスタムタイトルバー -->
+        <Grid Height="40" DockPanel.Dock="Top" Background="#FFEEEEEE"
+              MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- タイトル -->
+            <TextBlock Text="VRChat Camera OSC Control" VerticalAlignment="Center" Margin="10,0,0,0" FontWeight="Bold">
+                <TextBlock.Foreground>
+                    <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.WindowFrameColorKey}}"/>
+                </TextBlock.Foreground>
+            </TextBlock>
+
+            <!-- ボタン -->
+            <StackPanel Orientation="Horizontal" Grid.Column="1">
+                <Button Style="{StaticResource TitleBarButtonStyle}" ToolTip="タスクトレイに格納" Click="TrayButton_Click">
+                    <Grid Width="30" Height="20" Margin="0,7,0,0">
+                        <!-- 横線 -->
+                        <Rectangle Height="0.75" Fill="Black" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10,0,10,0"/>
+
+                        <!-- 左下矢印 -->
+                        <Path Stroke="Black" StrokeThickness="0.75" 
+                              Data="M0,0 L3,4 L6,0" 
+                              VerticalAlignment="Bottom" 
+                              HorizontalAlignment="Left"
+                              Width="6" Height="7"
+                              Margin="15,0,0,9"/>
+                    </Grid>
+                </Button>
+                <Button Style="{StaticResource TitleBarButtonStyle}" Content="⎯" Click="Minimize_Click" ToolTip="最小化"/>
+                <Button Style="{StaticResource TitleBarButtonStyle}" Content="□" Click="Maximize_Click" ToolTip="最大化"/>
+                <Button Style="{StaticResource TitleBarButtonStyle}" Content="✕" Click="Close_Click" ToolTip="閉じる"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- メイン領域 -->
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Width="1200" Height="540">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Height="540">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20*"/>
+                    <RowDefinition Height="60*"/>
+                </Grid.RowDefinitions>
+                <materialDesign:Card HorizontalAlignment="Center" VerticalAlignment="Center" Height="100" Width="780">
+                    <Grid Margin="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox x:Name="Send_Port_Text" Width="210" Height="40" 
+                                 materialDesign:HintAssist.Hint="送信ポート" 
+                                 materialDesign:TextFieldAssist.PrefixText="Port :"
+                                 Style="{StaticResource MaterialDesignFilledTextBox}"/>
+
+                        <TextBox x:Name="Receive_Port_Text" Grid.Column="1" Width="210" Height="40"
+                                 materialDesign:HintAssist.Hint="受信ポート" 
+                                 materialDesign:TextFieldAssist.PrefixText="Port :"
+                                 Style="{StaticResource MaterialDesignFilledTextBox}"/>
+
+                        <TextBox x:Name="IPv4_Address_Text" Grid.Column="2" Width="210" Height="40"
+                                 materialDesign:HintAssist.Hint="IPv4アドレス" 
+                                 materialDesign:TextFieldAssist.PrefixText="IPv4 :"
+                                 Style="{StaticResource MaterialDesignFilledTextBox}"/>
+                    </Grid>
+                </materialDesign:Card>
+
+                <materialDesign:Card HorizontalAlignment="Center" VerticalAlignment="Center" Height="400" Width="780" Grid.Row="1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <!-- 一列目 -->
+                        <StackPanel>
+                            <Grid Grid.Row="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="4*"/>
+                                </Grid.RowDefinitions>
+
+                                <Rectangle Grid.Row="1" Height="1" VerticalAlignment="Top" Margin="20,0,20,0">
+                                    <Rectangle.Fill>
+                                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.WindowFrameColorKey}}"/>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+
+                                <TextBlock HorizontalAlignment="Left" Margin="30,0,0,0" TextWrapping="Wrap" Text="Zoom" VerticalAlignment="Center" FontSize="15">
+                                    <TextBlock.Foreground>
+                                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.WindowFrameColorKey}}"/>
+                                    </TextBlock.Foreground>
+                                </TextBlock>
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <!-- スライダー -->
+                                    <Grid >
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <Label Content="Sensitivity" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top"/>
+                                        <Slider
+                                            Maximum="100"
+                                            Minimum="0"
+                                            x:Name="Zoom_Sensitivity"
+                                            Value="50" ValueChanged="Zoom_Slider_ValueChanged" 
+                                            Margin="10,0,10,5" 
+                                            Grid.Row="1"
+                                            TickFrequency="10"
+                                            IsSnapToTickEnabled="True"
+                                            TickPlacement="Both"
+                                            />
+                                        <CheckBox
+                                            x:Name="Zoom_Invert_CheckBox"
+                                            Margin="280,4,0,4"
+                                            Content="反転"
+                                            IsChecked="True" Unchecked ="Zoom_Invert_CheckBox_Checked" Checked="Zoom_Invert_CheckBox_Checked"/>
+                                    </Grid>
+                                    <ComboBox
+                                        x:Name="Zoom_ComboBox"
+                                        materialDesign:HintAssist.Hint="どの入力を使用するか選択してください"
+                                        IsEnabled="{Binding Path=IsChecked, ElementName=FilledComboBoxEnabledCheckBox}"
+                                        Style="{StaticResource MaterialDesignFilledComboBox}" 
+                                        Margin="10,10,10,0" SelectionChanged="Zoom_ComboBox_SelectionChanged" Grid.Column="1" VerticalAlignment="Center" Height="45"
+       >
+                                    </ComboBox>
+                                </Grid>
+
+                            </Grid>
+                        </StackPanel>
+
+                        <!-- ========== Exposure ========== -->
+                        <StackPanel Grid.Row="1">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="4*"/>
+                                </Grid.RowDefinitions>
+
+                                <Rectangle Grid.Row="1" Height="1" VerticalAlignment="Top" Margin="20,0,20,0">
+                                    <Rectangle.Fill>
+                                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.WindowFrameColorKey}}"/>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+
+                                <TextBlock HorizontalAlignment="Left" Margin="30,0,0,0" 
+                               Text="Exposure" VerticalAlignment="Center" FontSize="15" FontWeight="Bold">
+                                    <TextBlock.Foreground>
+                                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.WindowFrameColorKey}}"/>
+                                    </TextBlock.Foreground>
+                                </TextBlock>
+
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <Label Content="Sensitivity" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top"/>
+                                        <Slider Maximum="100" Minimum="0" x:Name="Exposure_Sensitivity"
+                                    Value="50" ValueChanged="Exposure_Slider_ValueChanged" 
+                                    Margin="10,0,10,5" Grid.Row="1"
+                                    TickFrequency="10" IsSnapToTickEnabled="True"
+                                    TickPlacement="Both"/>
+                                        <CheckBox x:Name="Exposure_Invert_CheckBox" Margin="280,4,0,4"
+                                      Content="反転"
+                                      IsChecked="True"
+                                      Unchecked="Exposure_Invert_CheckBox_Checked"
+                                      Checked="Exposure_Invert_CheckBox_Checked"/>
+                                    </Grid>
+
+                                    <ComboBox x:Name="Exposure_ComboBox"
+                                  materialDesign:HintAssist.Hint="どの入力を使用するか選択してください"
+                                  Style="{StaticResource MaterialDesignFilledComboBox}" 
+                                  Margin="10,15,10,0" SelectionChanged="Exposure_ComboBox_SelectionChanged"
+                                  Grid.Column="1" VerticalAlignment="Center" Height="45">
+                                    </ComboBox>
+                                </Grid>
+                            </Grid>
+                        </StackPanel>
+
+                        <!-- ========== Focal Distance ========== -->
+                        <StackPanel Grid.Row="2">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="4*"/>
+                                </Grid.RowDefinitions>
+
+                                <Rectangle Grid.Row="1" Height="1" VerticalAlignment="Top" Margin="20,0,20,0">
+                                    <Rectangle.Fill>
+                                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.WindowFrameColorKey}}"/>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+
+                                <TextBlock HorizontalAlignment="Left" Margin="30,0,0,0" 
+                               Text="Focal Distance" VerticalAlignment="Center" FontSize="15" FontWeight="Bold">
+                                    <TextBlock.Foreground>
+                                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.WindowFrameColorKey}}"/>
+                                    </TextBlock.Foreground>
+                                </TextBlock>
+
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <Label Content="Sensitivity" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top"/>
+                                        <Slider Maximum="100" Minimum="0" x:Name="FocalDistance_Sensitivity"
+                                    Value="50" ValueChanged="FocalDistance_Slider_ValueChanged" 
+                                    Margin="10,0,10,5" Grid.Row="1"
+                                    TickFrequency="10" IsSnapToTickEnabled="True"
+                                    TickPlacement="Both"/>
+                                        <CheckBox x:Name="FocalDistance_Invert_CheckBox" Margin="280,4,0,4"
+                                      Content="反転"
+                                      IsChecked="True"
+                                      Unchecked="FocalDistance_Invert_CheckBox_Checked"
+                                      Checked="FocalDistance_Invert_CheckBox_Checked"/>
+                                    </Grid>
+
+                                    <ComboBox x:Name="FocalDistance_ComboBox"
+                                  materialDesign:HintAssist.Hint="どの入力を使用するか選択してください"
+                                  Style="{StaticResource MaterialDesignFilledComboBox}" 
+                                  Margin="10,15,10,0" SelectionChanged="FocalDistance_ComboBox_SelectionChanged"
+                                  Grid.Column="1" VerticalAlignment="Center" Height="45">
+                                    </ComboBox>
+                                </Grid>
+                            </Grid>
+                        </StackPanel>
+
+                        <!-- ========== Aperture ========== -->
+                        <StackPanel Grid.Row="3">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="4*"/>
+                                </Grid.RowDefinitions>
+
+                                <Rectangle Grid.Row="1" Height="1" VerticalAlignment="Top" Margin="20,0,20,0">
+                                    <Rectangle.Fill>
+                                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.WindowFrameColorKey}}"/>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+
+                                <TextBlock HorizontalAlignment="Left" Margin="30,0,0,0" 
+                               Text="Aperture" VerticalAlignment="Center" FontSize="15" FontWeight="Bold">
+                                    <TextBlock.Foreground>
+                                        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.WindowFrameColorKey}}"/>
+                                    </TextBlock.Foreground>
+                                </TextBlock>
+
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <Label Content="Sensitivity" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top"/>
+                                        <Slider Maximum="100" Minimum="0" x:Name="Aperture_Sensitivity"
+                                    Value="50" ValueChanged="Aperture_Slider_ValueChanged" 
+                                    Margin="10,0,10,5" Grid.Row="1"
+                                    TickFrequency="10" IsSnapToTickEnabled="True"
+                                    TickPlacement="Both"/>
+                                        <CheckBox x:Name="Aperture_Invert_CheckBox" Margin="280,4,0,4"
+                                      Content="反転"
+                                      IsChecked="True"
+                                      Unchecked="Aperture_Invert_CheckBox_Checked"
+                                      Checked="Aperture_Invert_CheckBox_Checked"/>
+                                    </Grid>
+
+                                    <ComboBox x:Name="Aperture_ComboBox"
+                                  materialDesign:HintAssist.Hint="どの入力を使用するか選択してください"
+                                  Style="{StaticResource MaterialDesignFilledComboBox}" 
+                                  Margin="10,15,10,0" SelectionChanged="Aperture_ComboBox_SelectionChanged"
+                                  Grid.Column="1" VerticalAlignment="Center" Height="45">
+                                    </ComboBox>
+                                </Grid>
+                            </Grid>
+                        </StackPanel>
+                    </Grid>
+                </materialDesign:Card>
+            </Grid>
+
+
+            <materialDesign:Card HorizontalAlignment="Center" VerticalAlignment="Center" Height="480" Width="370" Grid.Column="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <CheckBox  x:Name="Stop_With_Both_Hands_Grip_CheckBox" Content="両手グリップで停止" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"
+                                  Click="StopWithBothHandsGripCheckBox"/>
+
+                    </Grid>
+                    <Button Content="リスタート" HorizontalAlignment="Left" Margin="268,0,0,0" Grid.Row="7" VerticalAlignment="Center" 
+                            Style="{StaticResource MaterialDesignRaisedButton}" 
+                            ToolTip="プログラムの初期化を行います。設定の初期化は行われません。" 
+                            Click="ResetButton_Click"/>
+                    <Button Content="ライセンス表示" Click="ShowLicenseButton_Click" Margin="36,16,144,14" Grid.Row="7"/>
+                    <Slider
+                        Maximum="10"
+                        Minimum="1"
+                        x:Name="UpdateFrequency"
+                        Value="50" ValueChanged="UpdateFrequency_Slider_ValueChanged" 
+                        Margin="10,25,10,3"
+                        TickFrequency="1"
+                        IsSnapToTickEnabled="True"
+                        TickPlacement="Both" Grid.Row="1"
+                                            />
+                    <TextBlock HorizontalAlignment="Left" Margin="10,5,0,0" 
+                        Text="UpdateFrequencyRate (xN)" VerticalAlignment="Top" FontSize="15" FontWeight="Bold" Grid.Row="1">
+                        <TextBlock.Foreground>
+                            <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.WindowFrameColorKey}}"/>
+                        </TextBlock.Foreground>
+                    </TextBlock>
+                </Grid>
+            </materialDesign:Card>
+        </Grid>
+    </DockPanel>
+</Window>
