@@ -1,16 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <Authors>$tanukisan</Authors>
+    <Product>$VRC_Camera_OSC_Controll</Product>
+    <PackageIcon>icon_2.png</PackageIcon>
+    <PackAsTool>False</PackAsTool>
+    <FileVersion>0.8.5.0</FileVersion>
+    <Title>VRC_Camera_OSC_Controll</Title>
+    <StartupObject></StartupObject>
+    <AssemblyName>VRChat Camera OSC Controll</AssemblyName>
+    <RootNamespace>$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <ApplicationIcon>ICON.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="ICON.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ICON.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,6 +52,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="icon_2.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

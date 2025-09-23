@@ -108,17 +108,21 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBox x:Name="Send_Port_Text" Width="210" Height="40" 
-                                 materialDesign:HintAssist.Hint="送信ポート" 
+                                 materialDesign:HintAssist.HelperText="送信ポート" 
+                                 materialDesign:HintAssist.Hint="ポート番号を入力してください"
                                  materialDesign:TextFieldAssist.PrefixText="Port :"
                                  Style="{StaticResource MaterialDesignFilledTextBox}"/>
 
                         <TextBox x:Name="Receive_Port_Text" Grid.Column="1" Width="210" Height="40"
-                                 materialDesign:HintAssist.Hint="受信ポート" 
+                                 materialDesign:HintAssist.HelperText="受信ポート" 
+                                 materialDesign:HintAssist.Hint="ポート番号を入力してください"
                                  materialDesign:TextFieldAssist.PrefixText="Port :"
+                                 materialDesign:BadgedAssist.Badge="必須"
                                  Style="{StaticResource MaterialDesignFilledTextBox}"/>
 
                         <TextBox x:Name="IPv4_Address_Text" Grid.Column="2" Width="210" Height="40"
-                                 materialDesign:HintAssist.Hint="IPv4アドレス" 
+                                 materialDesign:HintAssist.HelperText="IPv4アドレス" 
+                                 materialDesign:HintAssist.Hint="アドレスを入力してください"
                                  materialDesign:TextFieldAssist.PrefixText="IPv4 :"
                                  Style="{StaticResource MaterialDesignFilledTextBox}"/>
                     </Grid>
@@ -146,7 +150,7 @@
                                     </Rectangle.Fill>
                                 </Rectangle>
 
-                                <TextBlock HorizontalAlignment="Left" Margin="30,0,0,0" TextWrapping="Wrap" Text="Zoom" VerticalAlignment="Center" FontSize="15">
+                                <TextBlock HorizontalAlignment="Left" Margin="30,0,0,0" TextWrapping="Wrap" Text="ズーム" VerticalAlignment="Center" FontSize="15" FontWeight="Bold" FontFamily="Noto Sans JP Black">
                                     <TextBlock.Foreground>
                                         <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.WindowFrameColorKey}}"/>
                                     </TextBlock.Foreground>
@@ -162,7 +166,11 @@
                                             <RowDefinition Height="*"/>
                                             <RowDefinition Height="*"/>
                                         </Grid.RowDefinitions>
-                                        <Label Content="Sensitivity" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top"/>
+                                        <Label Content="ズーム 感度" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" FontFamily="Noto Sans JP Black">
+                                            <Label.Foreground>
+                                                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.WindowFrameColorKey}}"/>
+                                            </Label.Foreground>
+                                        </Label>
                                         <Slider
                                             Maximum="100"
                                             Minimum="0"
@@ -178,7 +186,11 @@
                                             x:Name="Zoom_Invert_CheckBox"
                                             Margin="280,4,0,4"
                                             Content="反転"
-                                            IsChecked="True" Unchecked ="Zoom_Invert_CheckBox_Checked" Checked="Zoom_Invert_CheckBox_Checked"/>
+                                            IsChecked="True" Unchecked ="Zoom_Invert_CheckBox_Checked" Checked="Zoom_Invert_CheckBox_Checked" FontFamily="Noto Sans JP Black">
+                                            <CheckBox.Foreground>
+                                                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.WindowFrameColorKey}}"/>
+                                            </CheckBox.Foreground>
+                                        </CheckBox>
                                     </Grid>
                                     <ComboBox
                                         x:Name="Zoom_ComboBox"
@@ -208,7 +220,7 @@
                                 </Rectangle>
 
                                 <TextBlock HorizontalAlignment="Left" Margin="30,0,0,0" 
-                               Text="Exposure" VerticalAlignment="Center" FontSize="15" FontWeight="Bold">
+                               Text="露光" VerticalAlignment="Center" FontSize="15" FontWeight="Bold" FontFamily="Noto Sans JP Black">
                                     <TextBlock.Foreground>
                                         <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.WindowFrameColorKey}}"/>
                                     </TextBlock.Foreground>
@@ -225,7 +237,11 @@
                                             <RowDefinition Height="*"/>
                                             <RowDefinition Height="*"/>
                                         </Grid.RowDefinitions>
-                                        <Label Content="Sensitivity" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top"/>
+                                        <Label Content="露光 感度" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" FontFamily="Noto Sans JP Black">
+                                            <Label.Foreground>
+                                                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.WindowFrameColorKey}}"/>
+                                            </Label.Foreground>
+                                        </Label>
                                         <Slider Maximum="100" Minimum="0" x:Name="Exposure_Sensitivity"
                                     Value="50" ValueChanged="Exposure_Slider_ValueChanged" 
                                     Margin="10,0,10,5" Grid.Row="1"
@@ -235,7 +251,7 @@
                                       Content="反転"
                                       IsChecked="True"
                                       Unchecked="Exposure_Invert_CheckBox_Checked"
-                                      Checked="Exposure_Invert_CheckBox_Checked"/>
+                                      Checked="Exposure_Invert_CheckBox_Checked" FontFamily="Noto Sans JP Black" Foreground="#E5313131"/>
                                     </Grid>
 
                                     <ComboBox x:Name="Exposure_ComboBox"
@@ -263,7 +279,7 @@
                                 </Rectangle>
 
                                 <TextBlock HorizontalAlignment="Left" Margin="30,0,0,0" 
-                               Text="Focal Distance" VerticalAlignment="Center" FontSize="15" FontWeight="Bold">
+                               Text="焦点距離" VerticalAlignment="Center" FontSize="15" FontWeight="Bold" FontFamily="Noto Sans JP Black">
                                     <TextBlock.Foreground>
                                         <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.WindowFrameColorKey}}"/>
                                     </TextBlock.Foreground>
@@ -280,7 +296,11 @@
                                             <RowDefinition Height="*"/>
                                             <RowDefinition Height="*"/>
                                         </Grid.RowDefinitions>
-                                        <Label Content="Sensitivity" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top"/>
+                                        <Label Content="焦点距離 感度" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" FontFamily="Noto Sans JP Black">
+                                            <Label.Foreground>
+                                                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.WindowFrameColorKey}}"/>
+                                            </Label.Foreground>
+                                        </Label>
                                         <Slider Maximum="100" Minimum="0" x:Name="FocalDistance_Sensitivity"
                                     Value="50" ValueChanged="FocalDistance_Slider_ValueChanged" 
                                     Margin="10,0,10,5" Grid.Row="1"
@@ -290,7 +310,7 @@
                                       Content="反転"
                                       IsChecked="True"
                                       Unchecked="FocalDistance_Invert_CheckBox_Checked"
-                                      Checked="FocalDistance_Invert_CheckBox_Checked"/>
+                                      Checked="FocalDistance_Invert_CheckBox_Checked" FontFamily="Noto Sans JP Black" Foreground="#E5313131"/>
                                     </Grid>
 
                                     <ComboBox x:Name="FocalDistance_ComboBox"
@@ -318,7 +338,7 @@
                                 </Rectangle>
 
                                 <TextBlock HorizontalAlignment="Left" Margin="30,0,0,0" 
-                               Text="Aperture" VerticalAlignment="Center" FontSize="15" FontWeight="Bold">
+                               Text="絞り" VerticalAlignment="Center" FontSize="15" FontWeight="Bold" FontFamily="Noto Sans JP Black">
                                     <TextBlock.Foreground>
                                         <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.WindowFrameColorKey}}"/>
                                     </TextBlock.Foreground>
@@ -335,7 +355,11 @@
                                             <RowDefinition Height="*"/>
                                             <RowDefinition Height="*"/>
                                         </Grid.RowDefinitions>
-                                        <Label Content="Sensitivity" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top"/>
+                                        <Label Content="絞り 感度" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" FontFamily="Noto Sans JP Black">
+                                            <Label.Foreground>
+                                                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.WindowFrameColorKey}}"/>
+                                            </Label.Foreground>
+                                        </Label>
                                         <Slider Maximum="100" Minimum="0" x:Name="Aperture_Sensitivity"
                                     Value="50" ValueChanged="Aperture_Slider_ValueChanged" 
                                     Margin="10,0,10,5" Grid.Row="1"
@@ -345,7 +369,7 @@
                                       Content="反転"
                                       IsChecked="True"
                                       Unchecked="Aperture_Invert_CheckBox_Checked"
-                                      Checked="Aperture_Invert_CheckBox_Checked"/>
+                                      Checked="Aperture_Invert_CheckBox_Checked" FontFamily="Noto Sans JP Black" Foreground="#E5313131"/>
                                     </Grid>
 
                                     <ComboBox x:Name="Aperture_ComboBox"
@@ -379,7 +403,7 @@
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <CheckBox  x:Name="Stop_With_Both_Hands_Grip_CheckBox" Content="両手グリップで停止" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"
+                        <CheckBox  x:Name="Stop_With_Both_Hands_Grip_CheckBox" Content="両手グリップで停止 (MAのモジュールを入れないと動きません)" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"
                                   Click="StopWithBothHandsGripCheckBox"/>
 
                     </Grid>
@@ -387,7 +411,10 @@
                             Style="{StaticResource MaterialDesignRaisedButton}" 
                             ToolTip="プログラムの初期化を行います。設定の初期化は行われません。" 
                             Click="ResetButton_Click"/>
-                    <Button Content="ライセンス表示" Click="ShowLicenseButton_Click" Margin="36,16,144,14" Grid.Row="7"/>
+                    <Button Content="ライセンスを表示する" HorizontalAlignment="Left" Margin="66,0,0,0" Grid.Row="7" VerticalAlignment="Center" 
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            Click="ShowLicenseButton_Click"/>
+
                     <Slider
                         Maximum="10"
                         Minimum="1"
@@ -399,7 +426,7 @@
                         TickPlacement="Both" Grid.Row="1"
                                             />
                     <TextBlock HorizontalAlignment="Left" Margin="10,5,0,0" 
-                        Text="UpdateFrequencyRate (xN)" VerticalAlignment="Top" FontSize="15" FontWeight="Bold" Grid.Row="1">
+                        Text="送信頻度 (xN)" VerticalAlignment="Top" FontSize="15" FontWeight="Bold" Grid.Row="1" >
                         <TextBlock.Foreground>
                             <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.WindowFrameColorKey}}"/>
                         </TextBlock.Foreground>
