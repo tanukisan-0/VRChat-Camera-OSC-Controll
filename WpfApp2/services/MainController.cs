@@ -273,21 +273,29 @@ public class MainController
                 9 => inputs.LeftController.rAxis4.x,
                 10 => inputs.LeftController.rAxis4.y, //None
                 11 => inputs.LeftController.ulButtonPressed, //未調査 ボタン
+                >= 12 and <= 71 => GetButtonBit(inputs.LeftController.ulButtonPressed, Aixs - 12),
 
-                51 => inputs.RightController.rAxis0.x * (1 - Math.Abs(inputs.RightController.rAxis0.y)),
-                52 => inputs.RightController.rAxis0.y * (1 - Math.Abs(inputs.RightController.rAxis0.x)),
-                53 => inputs.RightController.rAxis1.x,
-                54 => inputs.RightController.rAxis1.y,
-                55 => inputs.RightController.rAxis2.x,
-                56 => inputs.RightController.rAxis2.y,
-                57 => inputs.RightController.rAxis3.x,
-                58 => inputs.RightController.rAxis3.y,
-                59 => inputs.RightController.rAxis4.x,
-                60 => inputs.RightController.rAxis4.y,
-                61 => inputs.RightController.ulButtonPressed,
+                101 => inputs.RightController.rAxis0.x * (1 - Math.Abs(inputs.RightController.rAxis0.y)),
+                102 => inputs.RightController.rAxis0.y * (1 - Math.Abs(inputs.RightController.rAxis0.x)),
+                103 => inputs.RightController.rAxis1.x,
+                104 => inputs.RightController.rAxis1.y,
+                105 => inputs.RightController.rAxis2.x,
+                106 => inputs.RightController.rAxis2.y,
+                107 => inputs.RightController.rAxis3.x,
+                108 => inputs.RightController.rAxis3.y,
+                109 => inputs.RightController.rAxis4.x,
+                110 => inputs.RightController.rAxis4.y,
+                111 => inputs.RightController.ulButtonPressed,
+                >= 112 and <= 171 => GetButtonBit(inputs.RightController.ulButtonPressed, Aixs - 12),
 
                 _ => null
             };
+        }
+
+        private int? GetButtonBit(ulong buttons, int bitIndex)
+        {
+            if (bitIndex < 0 || bitIndex >= 64) return null; // 安全策
+            return (int)((buttons >> bitIndex) & 1);
         }
     }
 }
