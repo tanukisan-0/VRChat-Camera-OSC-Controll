@@ -1,0 +1,14 @@
+{
+    "Name":"vive_controller",
+    "inputs" : {
+        "MainStickAxisX": {
+            "InputType" : ""
+        }
+        "MainStickAxisY": 2,
+        "Trigger": {
+            "InputType" : "float",
+            ""
+        }
+        "Grip":
+    }
+}

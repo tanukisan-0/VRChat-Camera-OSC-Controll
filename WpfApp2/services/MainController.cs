@@ -143,7 +143,7 @@ public class MainController
     {
         if (_SteamVRSystem == null) return;
 
-        bool SendCount = (int)_OscService!.CameraParametars["Mode"]! == 1 && _SteamVRSystem.ControllerInputs.LeftController.rAxis2.x > 0.75 && _SteamVRSystem.ControllerInputs.RightController.rAxis2.x > 0.75;
+        bool SendCount = (int)_OscService!.CameraParametars["Mode"]! != 6 && (int)_OscService!.CameraParametars["Mode"]! != 0 && _SteamVRSystem.ControllerInputs.LeftController.rAxis2.x > 0.75 && _SteamVRSystem.ControllerInputs.RightController.rAxis2.x > 0.75;
         if (!SendCount)
             tempCameraParametar = _OscService!.CameraParametars;
 
